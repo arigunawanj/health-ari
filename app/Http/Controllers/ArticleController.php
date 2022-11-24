@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -88,7 +89,7 @@ class ArticleController extends Controller
         // Jika Fotonya ada
         if($request->hasFile('foto')){
             $file = $request->file('foto')->store('artikel/foto'); // Menyimpan Foto
-            
+            Storage::delete($article->foto);
             $article->update([
                 'judul' => $request->judul,
                 'isi' => $request->isi,
@@ -118,6 +119,9 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        if(Storage::delete($article->foto)){
+            Storage::delete($article->foto);
+        }
         $article->delete();
         return redirect('article');
     }
