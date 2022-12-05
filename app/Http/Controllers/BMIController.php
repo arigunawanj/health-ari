@@ -37,15 +37,16 @@ class BMIController extends Controller
     {
         // Mengambil Parameter di Kelas
         $hasil = new Konsul($request->tahun, $request->tinggi, $request->berat);
+        $hobi = explode(',',$request->hobi);
         // Menyimpan Data dari Form
         $yeah = [
             'nama' => $request->nama,
             'tinggi' => $request->tinggi,
             'berat' => $request->berat,
-            'hobi' => $request->hobi,
+            'hobi' => $hobi[rand(0, count($hobi) - 1)],
             'tahun' => $hasil->hitungUmur(),
             'konsultasi' => $hasil->konsultasi(),
-            'hasilbmi' => $hasil->hitungBMI(),
+            'hasilbmi' => round($hasil->hitungBMI(), 2),
             'statusbmi' => $hasil->status(),
         ];
 
@@ -129,7 +130,7 @@ class Konsul extends Hitung {
     public function status(){
         if($this->hitungBMI() >= 17 && $this->hitungBMI() <= 18.4){
             return 'Kurus';
-        } else if ($this->hitungBMI() >= 18.5  && $this->hitungBMI() <= 22.9){
+        } else if ($this->hitungBMI() >= 18.5  && $this->hitungBMI() <= 22.8){
             return 'Normal';
         } else if ($this->hitungBMI() >= 22.9  && $this->hitungBMI() <= 29.9){
             return 'Gemuk';
@@ -138,6 +139,18 @@ class Konsul extends Hitung {
         } else {
             return 'Silahkan Diisi';
         }
+
+        // if ($this->hitungBMI() >= 30) {
+        //     return 'Obesitas';
+        // } else if ($this->hitungBMI() <= 29.9  && $this->hitungBMI() >= 22.9){
+        //     return 'Gemuk';
+        // }else if ($this->hitungBMI() <= 22.8  && $this->hitungBMI() >= 18.5){
+        //     return 'Normal';
+        // } else if($this->hitungBMI() <= 18.4 && $this->hitungBMI() >= 17){
+        //     return 'Kurus';
+        // } else {
+        //     return 'Silahkan Diisi';
+        // }
     }
 
     // Konsultasi menggunakan Rumus Hasil Hitung Umur dan Hasil Hitung BMI
